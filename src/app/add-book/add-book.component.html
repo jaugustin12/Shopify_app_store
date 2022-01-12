@@ -1,0 +1,32 @@
+
+  <button mat-raised-button color="primary" style="margin-left: auto; margin-right: auto;" routerLink="/">Home</button>
+
+<form #signUpForm="ngForm" (ngSubmit)="signUpForm.valid && onSubmit(signUpForm)">
+
+  <input type="text" #title="ngModel" [(ngModel)]="bookService.selectedBook.title" name="title" placeholder="Enter title of the book"
+  required  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !title.valid }">
+    <div *ngIf="signUpForm.submitted && !title.valid">
+      <label class="validation-message">Title is required.</label>
+    </div>
+
+  <input type="text" #authors="ngModel" [(ngModel)]="bookService.selectedBook.authors" name="authors"
+    required placeholder="Enter authors of the book" [ngClass]="{'invalid-textbox' :signUpForm.submitted && !authors.valid }">
+    <div *ngIf="signUpForm.submitted && !authors.valid">
+      <label *ngIf="authors.errors.required" class="validation-message">Authors are required.</label>
+    </div>
+
+  <input type="text" #isbn="ngModel" [(ngModel)]="bookService.selectedBook.isbn" name="isbn"
+    placeholder="Enter ISBN of the book" [ngClass]="{'invalid-textbox' :signUpForm.submitted && !isbn.valid }">
+
+  <input type="submit" value="Add Book">
+</form>
+
+<!-- Success message -->
+<div class="success" *ngIf="showSuccessMessage">
+  Saved successfully
+</div>
+
+<!-- Error message -->
+<div class="alert" *ngIf="serverErrorMessages">
+  {{serverErrorMessages}}
+</div>

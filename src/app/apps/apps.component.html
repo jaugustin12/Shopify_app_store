@@ -1,0 +1,115 @@
+<mat-card *ngIf="toggleForm == true" class="example-card"
+  style="margin-left: 5vw; top: 15%; width: 80vw; height: 55vh; position: fixed; z-index: 3; background-color: rgba(29, 29, 29, 0.897);">
+  <button mat-button color="basic" style="color: whitesmoke;" (click)="toToggleForm()">X</button>
+  <mat-card-header>
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <mat-card-title *ngIf="post=='add'">Add Review</mat-card-title>
+    <mat-card-title style="color: whitesmoke;" *ngIf="post=='update'">Update Review</mat-card-title>
+    <!-- <mat-card-subtitle style="color: aliceblue;">{{book.authors}}</mat-card-subtitle>
+    <mat-card-subtitle style="color: aliceblue;">{{book.isbn}}</mat-card-subtitle>
+    <mat-card-subtitle style="color: aliceblue;">Comments</mat-card-subtitle> -->
+  </mat-card-header>
+  <mat-card-content>
+    <mat-card [style.overflow]="'auto'" style="height: 25vh;">
+      <mat-card-content>
+        <form class="example-container" #myform="ngForm" [formGroup]="reviewform" (ngSubmit)="myform.valid && onSubmit(myform)">
+
+          <mat-form-field appearance="fill" >
+            <mat-label>How many stars?</mat-label>
+            <input matInput type="number" placeholder="Ex. 12" formControlName="rating" min="1" max="5">
+            <span matSuffix>stars</span>
+            <!-- <mat-error *ngIf="rating.invalid">Rating: 1-5</mat-error> -->
+          </mat-form-field>
+<br>
+          <mat-form-field appearance="fill" style="width: 80%; height: 35%">
+              <mat-label>Enter your Review</mat-label>
+              <textarea matInput formControlName="text" placeholder="Review..."></textarea>
+          </mat-form-field>
+          <br>
+          
+          <input  *ngIf="post=='add'" type="submit" value="Submit review">
+          <input *ngIf="post=='update'" type="submit" value="Edit review">
+        </form>
+
+        {{serverErrorMessages}}
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+  <mat-card-actions>
+
+  </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="toggleInfo == true" class="example-card"
+  style="margin-left: 5vw; top: 15%; width: 80vw; height: 75vh; position: fixed; z-index: 3; background-color: rgba(155, 192, 155, 0.788);">
+  <button mat-button color="basic" (click)="toToggleInfo()">X</button>
+  <mat-card-header>
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <mat-card-title>{{app.id}}</mat-card-title>
+    <!-- <mat-card-subtitle style="color: aliceblue;">{{book.authors}}</mat-card-subtitle>
+    <mat-card-subtitle style="color: aliceblue;">{{book.isbn}}</mat-card-subtitle>
+    <mat-card-subtitle style="color: aliceblue;">Comments</mat-card-subtitle> -->
+  </mat-card-header>
+  <mat-card-content>
+    <mat-card [style.overflow]="'auto'" style="height: 55vh;">
+      <mat-card-content>
+        <div *ngIf="content == 'app'" [innerHTML]="app.description_raw"> </div>
+        <div *ngIf="content == 'reviews'">
+
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <thead>
+              <tr>
+                <!-- <th>Icon</th> -->
+                <th>app_id</th>
+                <th>author</th>
+                <th>rating</th>
+                <th>posted_at</th>
+                <th>body</th>
+                <th>helpful_count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let review of reviews">
+                <!-- <td><img src={{app.icon}} /></td> -->
+                <td>{{ review.app_id }}</td>
+                <td>{{ review.author }}</td>
+                <td>{{ review.rating }}</td>
+                <td>{{ review.posted_at }}</td>
+                <td>{{ review.body }}</td>
+                <td>{{ review.helpful_count }}</td>
+                <td><button *ngIf="review.author == userProfile.user.fullName" mat-raised-button color= "basic" (click)="update(review)">Update</button></td>
+                <td><button *ngIf="review.author == userProfile.user.fullName" mat-raised-button color= "warn" (click)="delete(review)">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+  <mat-card-actions>
+    <button *ngIf="content != 'reviews'"mat-raised-button (click)="showReviews()">Reviews</button>
+    <button mat-raised-button color="primary" style="float: right;"  *ngIf="content == 'reviews'" (click)="addReview()">Add Review</button>
+  </mat-card-actions>
+</mat-card>
+
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <!-- <th>Icon</th> -->
+      <th>id</th>
+      <th>pricing_hint</th>
+      <th>rating</th>
+      <th>reviews_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let app of apps" (click)="showinfo(app)">
+      <!-- <td><img src={{app.icon}} /></td> -->
+      <td>{{ app.id }}</td>
+      <td>{{ app.pricing_hint }}</td>
+      <td>{{ app.rating }}</td>
+      <td>{{ app.reviews_count }}</td>
+    </tr>
+  </tbody>
+</table>

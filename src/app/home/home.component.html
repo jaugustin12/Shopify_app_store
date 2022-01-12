@@ -1,0 +1,14 @@
+
+
+<div *ngIf="loggedIn == false" style="margin: 10%;">
+  <button mat-raised-button routerLink="/login">Login</button>
+  <button mat-raised-button color="primary" style="float: right;" routerLink="/register">Register</button>
+</div>
+
+<div *ngIf="loggedIn == true">
+  <p style="display: inline-flex;">Hi {{userProfile.fullName}}</p>
+  <!-- <button style="float: right;" *ngIf="userProfile.user.role == 'manager'" mat-raised-button
+   color="primary" style="float: right; display: inline-flex;" routerLink="/addBook">Add book</button> -->
+  <button style="float: right;" mat-raised-button color="warn" (click) ="logout()"> Log Out </button>
+  <app-apps></app-apps>
+</div>
